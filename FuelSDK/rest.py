@@ -143,7 +143,7 @@ class ET_Configure(ET_Constructor):
 ##
 ########
 class ET_Get(ET_Constructor):
-    def __init__(self, auth_stub, obj_type, props = None, search_filter = None, options = None):        
+    def __init__(self, auth_stub, obj_type, props = None, search_filter = None, options = None, client_ids = [], query_all_accounts = False):
         auth_stub.refresh_token()
         
         if props is None:   #if there are no properties to retrieve for the obj_type then return a Description of obj_type
@@ -154,6 +154,13 @@ class ET_Get(ET_Constructor):
                     props.append(prop.Name) 
 
         ws_retrieveRequest = auth_stub.soap_client.factory.create('RetrieveRequest')
+        ws_retrieveRequest.QueryAllAccounts = query_all_accounts
+
+        if client_ids:
+            formatted_client_ids = []
+            for client_id in client_ids:
+                formatted_client_ids.append({'CustomerKey': client_id})
+                ws_retrieveRequest.ClientIDs = formatted_client_ids
                 
         if props is not None:
             if type(props) is dict: # If the properties is a hash, then we just want to use the keys
@@ -287,7 +294,7 @@ class ET_BaseObject(object):
 class ET_GetSupport(ET_BaseObject):
     obj_type = 'ET_GetSupport'   #should be overwritten by inherited class
     
-    def get(self, m_props = None, m_filter = None, m_options = None):
+    def get(self, m_props=None, m_filter=None, m_options=None, client_ids=[], query_all_accounts=False):
         props = self.props
         search_filter = self.search_filter
         options = self.options
@@ -303,7 +310,13 @@ class ET_GetSupport(ET_BaseObject):
         if m_options is not None and type(m_filter) is dict:
             options = m_options
 
-        obj = ET_Get(self.auth_stub, self.obj_type, props, search_filter, options)
+        obj = ET_Get(self.auth_stub,
+                     self.obj_type, props,
+                     search_filter,
+                     options, 
+                     client_ids=client_ids,
+                     query_all_accounts=query_all_accounts)
+
         if obj is not None:
             self.last_request_id = obj.request_id
         return obj

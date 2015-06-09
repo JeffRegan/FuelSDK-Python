@@ -1,5 +1,74 @@
 from rest import ET_CUDSupport,ET_CUDSupportRest,ET_GetSupport,ET_Get,ET_Patch,ET_Post,ET_Delete,ET_Configure
 
+
+class ETBusinessUnit(ET_CUDSupport):
+
+    def __init__(self):
+        super(ETBusinessUnit, self).__init__()
+        self.obj_type = 'BusinessUnit'
+        self.street = None
+        self.city = None
+        self.state = None
+        self.country = None
+        self.zipcode = None
+        self.business_name = None
+        self.id = None
+        self.send_classification_id = None
+        self.description = None
+        self.email = None
+        self.parent_id = None
+        self.update = False
+
+    def map_properties(self):
+        self.props = {
+            'ID': None,
+            'Address': self.street,
+            'City': self.city,
+            'State': self.state,
+            'Country': self.country,
+            'Zip': self.zipcode,
+            'Name': self.business_name,
+            'FromName': self.business_name,
+            'Email': self.email,
+            'CustomerKey': self.id,
+            # 'DefaultSendClassification': self.send_classification_id,
+            'Description': self.description,
+            'ParentID': self.parent_id,
+            'InheritAddress': True,
+            'AccountType': 'BUSINESS_UNIT',
+            'MasterUnsubscribeBehavior': 'BUSINESS_UNIT_ONLY'}
+
+        # remove all None values
+        {k: v for k, v in self.props.items() if v}
+
+    def post_business_unit(self):
+        self.map_properties()
+        return self.post()
+
+    def get_business_unit(self, external_id=None):
+        self.props = [
+            'AccountType',
+            'Address',
+            'City',
+            'Country',
+            'CustomerKey',
+            'Description',
+            'Email',
+            'FromName',
+            'ID',
+            'InheritAddress',
+            'MasterUnsubscribeBehavior',
+            'Name',
+            'ParentID',
+            'State',
+            'Zip'
+        ]
+
+        if external_id and False:
+            self.search_filter = {'Property': 'CustomerKey', 'SimpleOperator': 'equals', 'Value': external_id}
+
+        return self.get()
+
 ########
 ##
 ##  wrap an Exact Target Content Area
