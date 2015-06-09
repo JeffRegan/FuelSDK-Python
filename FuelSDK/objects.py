@@ -125,7 +125,7 @@ class ET_TriggeredSend(ET_CUDSupport):
         self.obj_type = 'TriggeredSendDefinition'
 
     def send(self):
-        tscall = {"TriggeredSendDefinition" : self.props, "Subscribers" : self.subscribers, "Attributes": self.attributes }
+        tscall = {"TriggeredSendDefinition": self.props, "Subscribers": self.subscribers, "Attributes": self.attributes}
         self.obj = ET_Post(self.auth_stub, "TriggeredSend", tscall)
         return self.obj
 
@@ -134,7 +134,8 @@ class ET_Subscriber(ET_CUDSupport):
     def __init__(self):
         super(ET_Subscriber, self).__init__()
         self.obj_type = 'Subscriber'
-        
+
+
 class ET_DataExtension(ET_CUDSupport):
     columns = None
     
