@@ -45,7 +45,7 @@ class ETBusinessUnit(ET_CUDSupport):
         self.map_properties()
         return self.post()
 
-    def get_business_unit(self, external_id=None):
+    def get_business_unit(self, business_unit_ids=[], query_all_accounts=False):
         self.props = [
             'AccountType',
             'Address',
@@ -64,10 +64,7 @@ class ETBusinessUnit(ET_CUDSupport):
             'Zip'
         ]
 
-        if external_id and False:
-            self.search_filter = {'Property': 'CustomerKey', 'SimpleOperator': 'equals', 'Value': external_id}
-
-        return self.get()
+        return self.get(client_ids=business_unit_ids, query_all_accounts=query_all_accounts)
 
 ########
 ##
