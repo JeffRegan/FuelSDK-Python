@@ -1,5 +1,5 @@
 from rest import ET_CUDSupport,ET_CUDSupportRest,ET_GetSupport,ET_Get,ET_Patch,ET_Post,ET_Delete,ET_Configure
-
+from helpers import prune_dict
 
 class ETBusinessUnit(ET_CUDSupport):
 
@@ -13,7 +13,7 @@ class ETBusinessUnit(ET_CUDSupport):
         self.zipcode = None
         self.business_name = None
         self.id = None
-        self.send_classification_id = None
+        self.key = None
         self.description = None
         self.email = None
         self.parent_id = None
@@ -21,7 +21,7 @@ class ETBusinessUnit(ET_CUDSupport):
 
     def map_properties(self):
         self.props = {
-            'ID': None,
+            'ID': self.id,
             'Address': self.street,
             'City': self.city,
             'State': self.state,
@@ -30,8 +30,7 @@ class ETBusinessUnit(ET_CUDSupport):
             'Name': self.business_name,
             'FromName': self.business_name,
             'Email': self.email,
-            'CustomerKey': self.id,
-            # 'DefaultSendClassification': self.send_classification_id,
+            'CustomerKey': self.key,
             'Description': self.description,
             'ParentID': self.parent_id,
             'InheritAddress': True,
@@ -39,13 +38,13 @@ class ETBusinessUnit(ET_CUDSupport):
             'MasterUnsubscribeBehavior': 'BUSINESS_UNIT_ONLY'}
 
         # remove all None values
-        {k: v for k, v in self.props.items() if v}
+        self.props = prune_dict(self.props)
 
-    def post_business_unit(self):
+    def post(self):
         self.map_properties()
-        return self.post()
+        return super(ETBusinessUnit, self).post()
 
-    def get_business_unit(self, business_unit_ids=[], query_all_accounts=False):
+    def get(self, m_props=None, m_filter=None, m_options=None, client_ids=[], query_all_accounts=False):
         self.props = [
             'AccountType',
             'Address',
@@ -64,7 +63,139 @@ class ETBusinessUnit(ET_CUDSupport):
             'Zip'
         ]
 
-        return self.get(client_ids=business_unit_ids, query_all_accounts=query_all_accounts)
+        return super(ETBusinessUnit, self).get(client_ids=client_ids, query_all_accounts=query_all_accounts)
+
+
+class ETDeliveryProfile(ET_CUDSupport):
+
+    def __init__(self):
+        super(ETDeliveryProfile, self).__init__()
+        self.obj_type = 'DeliveryProfile'
+        self.key = None
+        self.id = None
+        self.name = None
+        self.description = None
+        self.partner_key = None
+
+    def map_properties(self):
+        self.props = {
+            'ID': self.id,
+            'CustomerKey': self.key,
+            'Name': self.name,
+            'Description': self.description,
+            'PartnerKey': self.partner_key,
+        }
+
+        # remove all None values
+        self.props = prune_dict(self.props)
+
+    def post(self):
+        self.map_properties()
+        return super(ETDeliveryProfile, self).post()
+
+    def get(self, m_props=None, m_filter=None, m_options=None, client_ids=[], query_all_accounts=False):
+        self.props = [
+            'ID',
+            'CustomerKey',
+            'Name',
+            'Description',
+            'CustomerKey',
+            'PartnerKey',
+        ]
+
+        return super(ETDeliveryProfile, self).get(client_ids=client_ids, query_all_accounts=query_all_accounts)
+
+
+class ETSenderProfile(ET_CUDSupport):
+
+    def __init__(self):
+        super(ETSenderProfile, self).__init__()
+        self.obj_type = 'DeliveryProfile'
+        self.key = None
+        self.id = None
+        self.description = None
+        self.partner_key = None
+        self.from_name = None
+        self.from_address = None
+
+    def map_properties(self):
+        self.props = {
+            'ID': self.id,
+            'CustomerKey': self.key,
+            'Name': self.name,
+            'Description': self.description,
+            'PartnerKey': self.partner_key,
+            'FromName': self.from_name,
+            'FromAddress': self.from_address
+        }
+
+        # remove all None values
+        self.props = prune_dict(self.props)
+
+    def post(self):
+        self.map_properties()
+        return super(ETSenderProfile, self).post()
+
+    def get(self, m_props=None, m_filter=None, m_options=None, client_ids=[], query_all_accounts=False):
+        self.props = [
+            'ID',
+            'CustomerKey',
+            'Name',
+            'Description',
+            'CustomerKey',
+            'PartnerKey',
+            'FromName',
+            'FromAddress'
+        ]
+
+        return super(ETSenderProfile, self).get(client_ids=client_ids, query_all_accounts=query_all_accounts)
+
+
+class ETSendClassification(ET_CUDSupport):
+
+    def __init__(self):
+        super(ETSendClassification, self).__init__()
+        self.obj_type = 'DeliveryProfile'
+        self.key = None
+        self.id = None
+        self.name = None
+        self.description = None
+        self.partner_key = None
+        self.sender_profile = None
+        self.delivery_profile = None
+
+    def map_properties(self):
+        self.props = {
+            'ID': self.id,
+            'CustomerKey': self.key,
+            'Name': self.name,
+            'Description': self.description,
+            'PartnerKey': self.partner_key,
+            'SenderProfile': self.sender_profile,
+            'DeliveryProfile': self.delivery_profile
+        }
+
+        # remove all None values
+        self.props = prune_dict(self.props)
+
+    def post(self):
+        self.map_properties()
+        return super(ETSendClassification, self).post()
+
+    def get(self, m_props=None, m_filter=None, m_options=None, client_ids=[], query_all_accounts=False):
+        self.props = [
+            'ID',
+            'CustomerKey',
+            'Name',
+            'Description',
+            'CustomerKey',
+            'PartnerKey',
+            'SenderProfile',
+            'DeliveryProfile'
+        ]
+
+        return super(ETSendClassification, self).get(client_ids=client_ids, query_all_accounts=query_all_accounts)
+
 
 ########
 ##
