@@ -161,8 +161,8 @@ class ETSendClassification(ET_CUDSupport):
         self.name = None
         self.description = None
         self.partner_key = None
-        self.sender_profile = None
-        self.delivery_profile = None
+        self.sender_profile_key = None
+        self.delivery_profile_key = None
 
     def map_properties(self):
         self.props = {
@@ -171,8 +171,8 @@ class ETSendClassification(ET_CUDSupport):
             'Name': self.name,
             'Description': self.description,
             'PartnerKey': self.partner_key,
-            'SenderProfile': self.sender_profile,
-            'DeliveryProfile': self.delivery_profile,
+            'SenderProfile': {"CustomerKey": self.sender_profile_key},
+            'DeliveryProfile': {"CustomerKey": self.delivery_profile_key},
             'SendPriority': 'Low',
             'SendClassificationType': 'Marketing'
         }
