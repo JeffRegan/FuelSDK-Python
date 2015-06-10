@@ -172,7 +172,9 @@ class ETSendClassification(ET_CUDSupport):
             'Description': self.description,
             'PartnerKey': self.partner_key,
             'SenderProfile': self.sender_profile,
-            'DeliveryProfile': self.delivery_profile
+            'DeliveryProfile': self.delivery_profile,
+            'SendPriority': 'Low',
+            'SendClassificationType': 'Marketing'
         }
 
         # remove all None values
@@ -191,7 +193,9 @@ class ETSendClassification(ET_CUDSupport):
             'CustomerKey',
             'PartnerKey',
             'SenderProfile',
-            'DeliveryProfile'
+            'DeliveryProfile',
+            'SendPriority',
+            'SendClassificationType'
         ]
 
         return super(ETSendClassification, self).get(client_ids=client_ids, query_all_accounts=query_all_accounts)
