@@ -1,4 +1,4 @@
-from suds.mx.appender import Appender,Content
+from suds.mx.appender import Appender, Content
 
 
 class _PropertyAppender(Appender):
@@ -7,14 +7,12 @@ class _PropertyAppender(Appender):
 
     Patched for FuelSDK
     """
-        
+
     def append(self, parent, content):
         p = content.value
         child = self.node(content)
         child_value = p.get()
-        if(child_value is None):
-            pass
-        else:
+        if child_value is not None:
             child.setText(child_value)
             parent.append(child)
             for item in p.items():
